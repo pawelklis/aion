@@ -1,5 +1,5 @@
 ﻿
-
+<DebuggerDisplay("Name={Name}")>
 Public Class ShiftType
     Public Property Id As String
     Public Property Name As String

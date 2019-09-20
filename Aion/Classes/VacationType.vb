@@ -1,5 +1,5 @@
 ﻿
-
+<DebuggerDisplay("Name={Name}")>
 Public Class VacationType
 
     Public Property Id As String

@@ -69,6 +69,7 @@
     <Compile Include="Classes\CustomColumnType.vb" />
     <Compile Include="Classes\CustomColumnValueType.vb" />
     <Compile Include="Classes\DayType.vb" />
+    <Compile Include="Classes\EntryType.vb" />
     <Compile Include="Classes\GrafikType.vb" />
     <Compile Include="Classes\GroupType.vb" />
     <Compile Include="Classes\HolidayType.vb" />

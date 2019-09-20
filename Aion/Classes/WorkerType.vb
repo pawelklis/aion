@@ -1,6 +1,6 @@
 ﻿
 
-
+<DebuggerDisplay("Name={Name}")>
 <Serializable> Public Class WorkerType
 
     Public Property Id As String
@@ -71,11 +71,12 @@
     End Function
 
     Public Function AddVacationShedule(startdate As DateTime, enddate As DateTime, description As String, hourType As HoursType) As String
-        Dim vs As New VacationType
-        vs.StartDate = startdate
-        vs.EndDate = enddate
-        vs.Description = description
-        vs.HourType = hourType
+        Dim vs As New VacationType With {
+            .StartDate = startdate,
+            .EndDate = enddate,
+            .Description = description,
+            .HourType = hourType
+        }
 
         Me.VacationShedule.Add(vs)
         Return "Dodano urlop"

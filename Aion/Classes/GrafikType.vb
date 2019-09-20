@@ -19,12 +19,88 @@
         Next
         Me.CustomColumns = New List(Of CustomColumnType)
 
+        Dim cc As CustomColumnType
+        cc = New CustomColumnType With {
+            .Name = "workerguid",
+            .isCustom = False,
+            .isVisible = False}
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+            .Name = "Pracownik",
+            .isCustom = False,
+            .isVisible = True}
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+    .Name = "Etat",
+    .isCustom = False,
+    .isVisible = True
+        }
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+    .Name = "Grupa",
+    .isCustom = False,
+    .isVisible = True
+        }
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+    .Name = "Norma",
+    .isCustom = False,
+    .isVisible = True
+        }
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+    .Name = "Suma",
+    .isCustom = False,
+    .isVisible = True
+     }
+        Me.AddCustomColumn(cc)
+        cc = New CustomColumnType With {
+    .Name = "Różnica",
+    .isCustom = False,
+    .isVisible = True
+        }
+        Me.AddCustomColumn(cc)
+
+
     End Sub
 
     Private Sub AddMonth(number As Integer)
         Dim M As New MonthType(number, Me.Yer)
         Me.Months.Add(M)
     End Sub
+
+
+    Public Function SetValue(workerGuid As String, shiftGuid As String, dayNumber As Integer, monthNumber As Integer, entrytype As DayType.EntryTypeValue)
+        Dim mM As MonthType = Nothing
+        For Each m In Me.Months
+            If m.Number = monthNumber Then mM = m
+        Next
+        Dim pP As WorkerType = Nothing
+        For Each g In mM.Groups
+            For Each w In g.Workers
+                If w.Id = workerGuid Then pP = w
+            Next
+        Next
+        Dim dD As DayType = Nothing
+        For Each d In pP.Days
+            If d.Data.Day = dayNumber Then
+                dD = d
+            End If
+        Next
+        Dim sS As ShiftType = Nothing
+        For Each s In Me.Shifts
+            If s.Id = shiftGuid Then sS = s
+        Next
+        If Not IsNothing(dD) And Not IsNothing(sS) Then
+            Return dD.SetValue(sS, entrytype)
+        Else
+            Return "Błąd wpisu, nie rozpoznano pracownika lub zmiany pracy"
+        End If
+
+
+
+
+    End Function
 
     Function AddCustomWorkerField(name As String) As String
 
@@ -81,6 +157,9 @@
     Public Function RemoveCustomColumn(name As String) As String
         For Each c In Me.CustomColumns
             If c.Name = name Then
+                If c.isCustom = False Then
+                    Return "Nie można usunąć tej kolumny"
+                End If
                 Me.CustomColumns.Remove(c)
 
                 For Each m In Me.Months
@@ -99,17 +178,18 @@
     Public Function AddShift(name As String, starttime As TimeSpan, endtime As TimeSpan, iswork As Boolean, hourtype As HoursType) As String
         If String.IsNullOrEmpty(name) Then Return "Nazwa jest wymagana"
         If Len(name) > 5 Then Return "Nazwa jest za długa, maksymalnie 5 znaków"
-
+        If IsNothing(Me.Shifts ) Then Me.Shifts = New List(Of ShiftType) 
         For Each ss In Me.Shifts
             If ss.Name = name Then Return "Nazwa jest już zajęta"
         Next
 
-        Dim s As New ShiftType
-        s.Name = name
-        s.StartTime = starttime
-        s.EndTime = endtime
-        s.IsWork = iswork
-        s.HourType = hourtype
+        Dim s As New ShiftType With {
+            .Name = name,
+            .StartTime = starttime,
+            .EndTime = endtime,
+            .IsWork = iswork,
+            .HourType = hourtype
+        }
 
         Me.Shifts.Add(s)
         Return "Dodano zmianę"
@@ -124,8 +204,7 @@
         Return "Nie znalezniono zmiany " & name & ", nie można usunąć"
     End Function
 
-
-    Public Function AddHourType(name As String, starttime As TimeSpan, endtime As TimeSpan, iswork As Boolean) As String
+    Public Function AddHourType(name As String) As String
         If String.IsNullOrEmpty(name) Then Return "Nazwa jest wymagana"
 
 
@@ -133,12 +212,13 @@
             If ss.Name = name Then Return "Nazwa jest już zajęta"
         Next
 
-        Dim s As New HoursType
-        s.Name = name
+        Dim s As New HoursType With {
+            .Name = name
+        }
 
 
         Me.HourTypes.Add(s)
-        Return "Dodano rodzja godzin"
+        Return "Dodano rodzaj godzin"
     End Function
     Public Function RemoveHourType(name As String) As Boolean
         For Each s In Me.HourTypes

@@ -38,12 +38,13 @@
             If ss.Name = name Then Return "Nazwa jest już zajęta"
         Next
 
-        Dim s As New ShiftType
-        s.Name = name
-        s.StartTime = starttime
-        s.EndTime = endtime
-        s.IsWork = iswork
-        s.HourType = hourtype
+        Dim s As New ShiftType With {
+            .Name = name,
+            .StartTime = starttime,
+            .EndTime = endtime,
+            .IsWork = iswork,
+            .HourType = hourtype
+        }
 
         Me.Shifts.Add(s)
         Return "Dodano zmianę"

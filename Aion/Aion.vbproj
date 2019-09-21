@@ -5,12 +5,12 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{8B3FF920-4AA5-4B42-8EA5-8AE9EB1C273F}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>Aion.Module1</StartupObject>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Aion.My.MyApplication</StartupObject>
     <RootNamespace>Aion</RootNamespace>
     <AssemblyName>Aion</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
@@ -50,6 +50,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -76,7 +78,14 @@
     <Compile Include="Classes\HoursType.vb" />
     <Compile Include="Classes\MonthType.vb" />
     <Compile Include="Classes\ShiftType.vb" />
+    <Compile Include="Classes\StyleType.vb" />
     <Compile Include="Classes\VacationType.vb" />
+    <Compile Include="Forms\frmTest.Designer.vb">
+      <DependentUpon>frmTest.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmTest.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Module1.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -96,6 +105,9 @@
     <Compile Include="Classes\WorkerType.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\frmTest.resx">
+      <DependentUpon>frmTest.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>

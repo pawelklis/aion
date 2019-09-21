@@ -8,6 +8,8 @@ Public Class DayType
     Public Property IsHoliday As Boolean
     Public Property IsSunday As Boolean
     Public Property IsSaturday As Boolean
+    Public Property Style As StyleType
+
 
     Public Property Planned As EntryType
     Public Property Executed As EntryType
@@ -33,11 +35,11 @@ Public Class DayType
         Me.Planned = New EntryType
         Me.Executed = New EntryType
 
+        Me.Style = New StyleType
 
     End Sub
 
     Public Enum EntryTypeValue
-
         Planned = 1
         Executed = 2
     End Enum
@@ -77,6 +79,21 @@ Public Class DayType
 
         End Select
         Return sb.ToString
+    End Function
+    Public Function RemoveValue(id As String) As String
+        For Each v In Me.Planned.Entries
+            If v.Id = id Then
+                Me.Planned.Entries.Remove(v)
+                Return "Usunięto wpis"
+            End If
+        Next
+        For Each v In Me.Executed.Entries
+            If v.Id = id Then
+                Me.Executed.Entries.Remove(v)
+                Return "Usunięto wpis"
+            End If
+        Next
+        Return "Nie znaleziono wpisu"
     End Function
     Private Function CheckEntry(shift As ShiftType, entry As EntryType) As String
         For Each s In entry.Entries

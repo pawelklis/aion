@@ -51,6 +51,14 @@
         Return "Nie znaleziono pola " & name & " do usunięcia"
     End Function
 
+    Public Function GetCustomValue(name As String) As String
+        For Each cc In Me.CustomColumnValues
+            If cc.Name = name Then
+                Return cc.Val
+            End If
+        Next
+        Return ""
+    End Function
     Public Function AddCustomColumnValue(cv As CustomColumnValueType) As String
         For Each c In Me.CustomColumnValues
             If c.Name = cv.Name Then

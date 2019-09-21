@@ -32,6 +32,10 @@
         Print(g.Months(0).RemoveHoliday("2019-01-02"))
         Print(g.Months(0).AddHoliday("2019-01-06", "3 króli"))
 
+
+        frmTest.Bind(g)
+
+        Console.ReadLine()
     End Sub
     Sub Print(v As String)
 

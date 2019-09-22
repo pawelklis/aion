@@ -49,7 +49,7 @@ Public Class DayType
             Case EntryTypeValue.Planned
                 Dim a As String = CheckEntry(shift, Me.Planned)
                 If a <> "" Then
-                    Return a
+                    Return Me.GetValue(entrytype)
                 End If
 
                 Me.Planned.Entries.Add(shift)
@@ -58,7 +58,7 @@ Public Class DayType
 
                 Dim a As String = CheckEntry(shift, Me.Executed)
                 If a <> "" Then
-                    Return a
+                    Return Me.GetValue(entrytype)
                 End If
                 Me.Executed.Entries.Add(shift)
         End Select
@@ -73,7 +73,7 @@ Public Class DayType
                     sb.AppendLine(s.Name)
                 Next
             Case EntryTypeValue.Executed
-                For Each s In Me.Planned.Entries
+                For Each s In Me.Executed.Entries
                     sb.AppendLine(s.Name)
                 Next
 

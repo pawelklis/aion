@@ -16,9 +16,14 @@
         Print(g.Months(0).RemoveGroup("test"))
         Print(g.Months(0).RemoveGroup("g1"))
 
-        Dim ww As New WorkerType(g.CustomFieldsDictionary, 1.0, g.Months(0))
+        Dim ww As WorkerType
+        For i = 1 To 10
+            ww = New WorkerType(g.CustomFieldsDictionary, 1.0, g.Months(0))
+            ww.Name = "Pracownik " & i
+            Print(g.Months(0).Groups(0).AddWorker(ww))
+        Next
 
-        Print(g.Months(0).Groups(0).AddWorker(ww))
+
 
         Dim ss As New ShiftType With {
             .StartTime = TimeSpan.Parse("07:00"),

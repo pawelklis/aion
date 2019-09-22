@@ -113,7 +113,15 @@
         Return "Brak grupy " & name & " do usunięcia"
     End Function
 
+    Public Function DaysList() As List(Of DayType)
+        DaysList = New List(Of DayType)
+        For i = 1 To Me.DaysInMonth
+            Dim d As New DayType(Me.Yer & "-" & Me.Number & "-" & i, Me.Holidays)
+            DaysList.Add(d)
+        Next
 
+
+    End Function
     Public Function AddShift(name As String, starttime As TimeSpan, endtime As TimeSpan, iswork As Boolean, hourtype As HoursType) As String
         If String.IsNullOrEmpty(name) Then Return "Nazwa jest wymagana"
         If Len(name) > 5 Then Return "Nazwa jest za długa, maksymalnie 5 znaków"

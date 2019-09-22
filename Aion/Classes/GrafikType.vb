@@ -1,4 +1,5 @@
 ﻿
+Imports System.Drawing
 Imports System.Windows.Forms
 
 <DebuggerDisplay("Rok={yer}")>
@@ -36,42 +37,50 @@ Imports System.Windows.Forms
         cc = New CustomColumnType With {
             .Name = ConstColumnNames.workerguid.ToString,
             .IsCustom = False,
-            .IsVisible = False}
+            .IsVisible = False
+           }
+        cc.Style.Width = 100
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
             .Name = ConstColumnNames.Pracownik.ToString,
             .IsCustom = False,
             .IsVisible = True}
+        cc.Style.Width = 100
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
     .Name = ConstColumnNames.Etat.ToString,
     .IsCustom = False,
     .IsVisible = True
         }
+        cc.Style.Width = 50
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
     .Name = ConstColumnNames.Grupa.ToString,
     .IsCustom = False,
     .IsVisible = True
         }
+        cc.Style.Width = 50
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
     .Name = ConstColumnNames.Norma.ToString,
     .IsCustom = False,
     .IsVisible = True
         }
+        cc.Style.Width = 50
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
     .Name = ConstColumnNames.Suma.ToString,
     .IsCustom = False,
     .IsVisible = True
      }
+        cc.Style.Width = 50
         Me.AddCustomColumn(cc)
         cc = New CustomColumnType With {
     .Name = ConstColumnNames.Różnica.ToString,
     .IsCustom = False,
     .IsVisible = True
         }
+        cc.Style.Width = 50
         Me.AddCustomColumn(cc)
 
 
@@ -84,80 +93,84 @@ Imports System.Windows.Forms
 
 
     Public Sub DataSrc(dg As DataGridView, monthNumber As Integer)
-        Dim dt As New DataTable
-        Dim c As DataGridViewColumn
+        dg.ClearSelection()
         dg.Columns.Clear()
+        dg.AllowUserToAddRows = False
 
-        For Each cc In Me.CustomColumns
-            Dim dtC As New DataColumn
-            dtC.ColumnName = cc.Id
-            dtC.Namespace = cc.Name
-            dtC.ExtendedProperties.Add("IsCustom", cc.IsCustom)
-            dtC.ExtendedProperties.Add("isDayColumn", cc.isDayColumn)
+        Dim CC As DataGridViewTextBoxColumn
 
-            For i = 1 To
+        For Each c In Me.CustomColumns
+            CC = New DataGridViewTextBoxColumn
+            CC.Name = c.Name
+            CC.HeaderText = c.Name
+            CC.Width = c.Style.Width
+            CC.Visible = c.IsVisible
 
-            dt.Columns.Add(dtC)
-
-            c = New DataGridViewTextBoxColumn
-            c.Name = cc.Id
-            c.HeaderText = cc.Name
-            c.DataPropertyName = cc.Id
-
-            dg.Columns.Add(c)
-
-            c.Width = cc.Style.Width
-            c.HeaderCell.Style.Font = cc.Style.Font
-            c.HeaderCell.Style.ForeColor = cc.Style.ForeColor
-            c.HeaderCell.Style.BackColor = cc.Style.BackColor
-            c.Visible = True
-
+            dg.Columns.Add(CC)
         Next
 
+        For Each d In Me.Months(monthNumber).DaysList
+            CC = New DataGridViewTextBoxColumn
+            CC.Name = d.Data.Day
+            CC.HeaderText = d.Data.Day & vbcrlf & d.Data.ToString("ddd")
+            CC.Width = 60
 
+            If d.IsHoliday Then CC.DefaultCellStyle.BackColor = Color.Orange
+            If d.IsSaturday Then CC.DefaultCellStyle.BackColor = Color.Silver
+            If d.IsSunday Then CC.DefaultCellStyle.BackColor = Color.DimGray
+
+            dg.Columns.Add(CC)
+        Next
+
+        Dim row As DataGridViewRow
         For Each g In Me.Months(monthNumber).Groups
             For Each w In g.Workers
+                dg.Rows.Add()
+                row = dg.Rows(dg.Rows.Count - 1)
+                row.Height = 60
+
+                row.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter
+                row.DefaultCellStyle.WrapMode = DataGridViewTriState.True
+
+                row.Cells(ConstColumnNames.Pracownik.ToString).Value = w.Name
+                row.Cells(ConstColumnNames.Etat.ToString).Value = w.Etat
+                row.Cells(ConstColumnNames.Grupa.ToString).Value = g.Name
+                row.Cells(ConstColumnNames.Norma.ToString).Value = ""
+                row.Cells(ConstColumnNames.Różnica.ToString).Value = ""
+                row.Cells(ConstColumnNames.Suma.ToString).Value = ""
+                row.Cells(ConstColumnNames.workerguid.ToString).Value = w.Id
+
                 For Each d In w.Days
-                    dt.Rows.Add()
-                    Dim i As Integer = dt.Rows.Count - 1
-
-                    For Each dtc As DataColumn In dt.Columns
-                        If dtc.ExtendedProperties("isDayColumn") = False Then
-                            dt.Rows(i)(dtc.ColumnName) = d.GetValue(DayType.EntryTypeValue.Planned)
-                        Else
-                            If dtc.ExtendedProperties("isCustom") = False Then
-                                If dtc.Namespace = ConstColumnNames.workerguid.ToString Then dt.Rows(i)(dtc.ColumnName) = w.Id
-                                If dtc.Namespace = ConstColumnNames.Etat.ToString Then dt.Rows(i)(dtc.ColumnName) = w.Etat
-                                If dtc.Namespace = ConstColumnNames.Grupa.ToString Then dt.Rows(i)(dtc.ColumnName) = g.Name
-                                If dtc.Namespace = ConstColumnNames.Norma.ToString Then dt.Rows(i)(dtc.ColumnName) = Me.Months(monthNumber).Norm
-                                If dtc.Namespace = ConstColumnNames.Pracownik.ToString Then dt.Rows(i)(dtc.ColumnName) = w.Name
-                                If dtc.Namespace = ConstColumnNames.Suma.ToString Then dt.Rows(i)(dtc.ColumnName) = w.Id
-                                If dtc.Namespace = ConstColumnNames.Różnica.ToString Then dt.Rows(i)(dtc.ColumnName) = w.Id
-                                If dtc.ExtendedProperties("isDayColumn") = True Then
-                                    dt.Rows(i)(dtc.ColumnName) = d.GetValue(DayType.EntryTypeValue.Executed)
-                                End If
-                            Else
-                                dt.Rows(i)(dtc.ColumnName) = w.GetCustomValue(dtc.Namespace)
-                            End If
-                        End If
-
-                    Next
-
-
+                    row.Cells(d.Data.Day.ToString).Value = d.GetValue(DayType.EntryTypeValue.Planned)
                 Next
+
+                'For Each c As DataGridViewCell In row.Cells
+                '    c.Style.Alignment = DataGridViewContentAlignment.MiddleCenter
+                '    c.Style.WrapMode = DataGridViewTriState.True
+                'Next
             Next
         Next
 
+        AddHandler dg.CellEndEdit, AddressOf dg_CellEndEdit
 
-
-        Dim bs As New BindingSource
-        bs.DataSource = dt
-        dg.DataSource = bs
-
+    End Sub
+#Region "GridEvents"
+    Private Sub dg_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs)
+        Dim dg As DataGridView = sender
+        If e.RowIndex > -1 Then
+            If e.ColumnIndex > -1 Then
+                Dim v As String = dg.Rows(e.RowIndex).Cells(e.ColumnIndex).Value.ToString
+                For Each s In Me.Shifts
+                    If s.Name = v Then
+                        dg.Rows(e.RowIndex).Cells(e.ColumnIndex).Value = Me.SetValue(dg.Rows(e.RowIndex).Cells(ConstColumnNames.workerguid.ToString).Value, s.Id, dg.Columns(e.ColumnIndex).Name, 1, DayType.EntryTypeValue.Executed)
+                    End If
+                Next
+            End If
+        End If
 
 
     End Sub
-
+#End Region
     Public Function SetValue(workerGuid As String, shiftGuid As String, dayNumber As Integer, monthNumber As Integer, entrytype As DayType.EntryTypeValue)
         Dim mM As MonthType = Nothing
         For Each m In Me.Months

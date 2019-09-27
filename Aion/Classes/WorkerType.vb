@@ -31,6 +31,36 @@
 
     End Sub
 
+    Public Function Suma(entryType As DayType.EntryTypeValue) As TimeSpan
+
+        Dim mns As Integer = 0
+
+        Select Case entryType
+            Case DayType.EntryTypeValue.Executed
+                For Each d In Me.Days
+                    For Each entry In d.Executed.Entries
+                        If entry.IsWork = True Then
+
+                            mns += entry.TimeDifference.TotalMinutes
+                        End If
+                    Next
+                Next
+
+            Case DayType.EntryTypeValue.Planned
+                For Each d In Me.Days
+                    For Each entry In d.Planned.Entries
+                        If entry.IsWork = True Then
+
+                            mns += entry.TimeDifference.TotalMinutes
+                        End If
+                    Next
+                Next
+        End Select
+
+        Suma = TimeSpan.FromMinutes(mns)
+
+    End Function
+
     Public Function AddCustomField(name As String) As String
 
         If Me.CustomFields.ContainsKey(name) Then

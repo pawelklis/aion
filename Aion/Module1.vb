@@ -32,7 +32,7 @@
             .Name = "8D"}
         g.AddShift(ss.Name, ss.StartTime, ss.EndTime, ss.IsWork, ss.HourType)
 
-        Print(g.SetValue(ww.Id, g.Shifts(0).Id, 1, 1, DayType.EntryTypeValue.Planned))
+        'Print(g.SetValue(ww.Id, g.Shifts(0).Id, 1, 1, DayType.EntryTypeValue.Planned))
 
         Print(g.Months(0).RemoveHoliday("2019-01-02"))
         Print(g.Months(0).AddHoliday("2019-01-06", "3 króli"))

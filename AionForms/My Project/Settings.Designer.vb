@@ -53,52 +53,6 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
-        
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.ConnectionString),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Dsn=aion")>  _
-        Public ReadOnly Property aionCS() As String
-            Get
-                Return CType(Me("aionCS"),String)
-            End Get
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("localhost")>  _
-        Public Property serwer() As String
-            Get
-                Return CType(Me("serwer"),String)
-            End Get
-            Set
-                Me("serwer") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("aion")>  _
-        Public Property dbname() As String
-            Get
-                Return CType(Me("dbname"),String)
-            End Get
-            Set
-                Me("dbname") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("mayday1")>  _
-        Public Property pwd() As String
-            Get
-                Return CType(Me("pwd"),String)
-            End Get
-            Set
-                Me("pwd") = value
-            End Set
-        End Property
     End Class
 End Namespace
 
@@ -110,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Aion.My.MySettings
+        Friend ReadOnly Property Settings() As Global.AionForms.My.MySettings
             Get
-                Return Global.Aion.My.MySettings.Default
+                Return Global.AionForms.My.MySettings.Default
             End Get
         End Property
     End Module
